@@ -16,8 +16,11 @@
 #include "modules/perception/lidar_detection/detector/cnn_segmentation/cnn_segmentation.h"
 
 #include <algorithm>
+#include <cstdio>
+#include <cstdlib>
 #include <limits>
 
+#include "glog/logging.h"
 #include "gtest/gtest.h"
 #include "pcl/io/pcd_io.h"
 
@@ -31,6 +34,20 @@ constexpr float kFloatEpsilon = std::numeric_limits<float>::epsilon();
 namespace apollo {
 namespace perception {
 namespace lidar {
+
+namespace {
+LidarDetectorInitOptions GetCnnSegTestInitOptions() {
+  LidarDetectorInitOptions options;
+  options.config_path = "perception/lidar_detection/data";
+  options.config_file = "cnnseg64_param.pb.txt";
+  return options;
+}
+
+void ClearCnnSegTestEnvironment() {
+  unsetenv("CYBER_PATH");
+  unsetenv("MODULE_PATH");
+}
+}  // namespace
 
 bool LoadPCDFile(const std::string& file_path, base::PointFCloudPtr cloud_out) {
   int ret = 0;
@@ -74,8 +91,7 @@ void PrintObjects(const std::vector<base::ObjectPtr>& objects) {
 }
 
 TEST(CNNSegmentationTest, cnn_segmentation_sequence_test) {
-  unsetenv("CYBER_PATH");
-  unsetenv("MODULE_PATH");
+  ClearCnnSegTestEnvironment();
   FLAGS_work_root =
       "/apollo/modules/perception/common/testdata/"
       "lidar/lib/segmentation/cnnseg/";
@@ -89,7 +105,8 @@ TEST(CNNSegmentationTest, cnn_segmentation_sequence_test) {
   frame_data.world_cloud = base::PointDCloudPool::Instance().Get();
   EXPECT_FALSE(segmentation->Detect(options, &frame_data));
 
-  EXPECT_TRUE(segmentation->Init());
+  LidarDetectorInitOptions init_options = GetCnnSegTestInitOptions();
+  EXPECT_TRUE(segmentation->Init(init_options));
   EXPECT_TRUE(segmentation->InitClusterAndBackgroundSegmentation());
 
   std::string pcd_path =
@@ -120,8 +137,7 @@ TEST(CNNSegmentationTest, cnn_segmentation_sequence_test) {
 }
 
 TEST(CNNSegmentationTest, cnn_segmentation_test) {
-  unsetenv("CYBER_PATH");
-  unsetenv("MODULE_PATH");
+  ClearCnnSegTestEnvironment();
   FLAGS_work_root =
       "/apollo/modules/perception/common/testdata/"
       "lidar/lib/segmentation/cnnseg/";
@@ -145,7 +161,8 @@ TEST(CNNSegmentationTest, cnn_segmentation_test) {
 
   // test init
   auto segmentation = std::shared_ptr<CNNSegmentation>(new CNNSegmentation);
-  EXPECT_TRUE(segmentation->Init());
+  LidarDetectorInitOptions init_options = GetCnnSegTestInitOptions();
+  EXPECT_TRUE(segmentation->Init(init_options));
 
   // test segment
   using base::ObjectType;
@@ -200,3 +217,16 @@ TEST(CNNSegmentationTest, cnn_segmentation_test) {
 }  // namespace lidar
 }  // namespace perception
 }  // namespace apollo
+
+int main(int argc, char** argv) {
+  FLAGS_logtostderr = true;
+  FLAGS_alsologtostderr = true;
+  FLAGS_log_dir = "";
+  google::InitGoogleLogging(argv[0]);
+  ::testing::InitGoogleTest(&argc, argv);
+  const int ret = RUN_ALL_TESTS();
+  google::ShutdownGoogleLogging();
+  std::fflush(nullptr);
+  // Avoid libglog global teardown after Bazel sets TEST_TMPDIR for this test.
+  std::_Exit(ret);
+}

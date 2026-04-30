@@ -18,6 +18,28 @@ filegroup(
 )
 
 apollo_cc_library(
+    name = "center_point_proposal_export",
+    srcs = ["detector/center_point_detection/proposal_export.cc"],
+    hdrs = ["detector/center_point_detection/proposal_export.h"],
+    deps = [
+        ":center_point_proposal_refine",
+        "//cyber",
+        "//modules/perception/lidar_detection/detector/center_point_detection/proto:center_point_model_param_cc_proto",
+    ],
+)
+
+apollo_cc_library(
+    name = "center_point_proposal_refine",
+    srcs = ["detector/center_point_detection/proposal_refine.cc"],
+    hdrs = ["detector/center_point_detection/proposal_refine.h"],
+    deps = [
+        "//cyber",
+        "//modules/common/math",
+        "//modules/perception/lidar_detection/detector/center_point_detection/proto:center_point_model_param_cc_proto",
+    ],
+)
+
+apollo_cc_library(
     name = "point_pillars_common",
     hdrs = ["detector/point_pillars_detection/common.h"],
 )
@@ -163,6 +185,8 @@ apollo_cc_library(
     copts = PERCEPTION_COPTS + if_profiler() + ["-DENABLE_PROFILER=1"],
     deps = [
         ":anchor_mask_cuda",
+        ":center_point_proposal_export",
+        ":center_point_proposal_refine",
         ":feature_generator_cuda",
         ":nms_cuda",
         ":pfe_cuda",
@@ -221,6 +245,30 @@ apollo_component(
 )
 
 apollo_cc_test(
+    name = "proposal_export_test",
+    size = "small",
+    srcs = ["detector/center_point_detection/proposal_export_test.cc"],
+    deps = [
+        ":center_point_proposal_export",
+        ":center_point_proposal_refine",
+        "//cyber",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+apollo_cc_test(
+    name = "proposal_refine_test",
+    size = "small",
+    srcs = ["detector/center_point_detection/proposal_refine_test.cc"],
+    deps = [
+        ":center_point_proposal_refine",
+        "//cyber",
+        "//modules/common/math",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+
+apollo_cc_test(
     name = "cnn_segmentation_test",
     size = "large",
     srcs = ["detector/cnn_segmentation/cnn_segmentation_test.cc"],
@@ -228,7 +276,8 @@ apollo_cc_test(
         ":apollo_perception_lidar_detection",
         "//modules/perception/common:perception_gflags",
         "//modules/perception/common/algorithm:apollo_perception_common_algorithm",
-        "@com_google_googletest//:gtest_main",
+        "@com_github_google_glog//:glog",
+        "@com_google_googletest//:gtest",
     ],
 )
 

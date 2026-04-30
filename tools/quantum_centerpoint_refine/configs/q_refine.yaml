@@ -1,0 +1,11 @@
+seed: 2026
+proposal_feature_dim: 9
+n_qubits: 4
+n_layers: 2
+validation_fraction: 0.2
+synthetic:
+  num_samples: 128
+training:
+  epochs: 5
+  ridge_l2: 0.0001
+  output_dir: /tmp/quantum_centerpoint_refine

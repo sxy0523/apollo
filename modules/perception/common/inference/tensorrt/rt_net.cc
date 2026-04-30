@@ -1028,21 +1028,40 @@ void RTNet::parse_with_api(
 }
 
 RTNet::~RTNet() {
-  if (is_own_calibrator_ && calibrator_ != nullptr) {
-    delete calibrator_;
-  }
   if (gpu_id_ >= 0) {
-    BASE_GPU_CHECK(cudaStreamDestroy(stream_));
-    network_->destroy();
+    BASE_GPU_CHECK(cudaSetDevice(gpu_id_));
+    if (stream_ != 0) {
+      BASE_GPU_CHECK(cudaStreamSynchronize(stream_));
+    }
+    if (context_ != nullptr) {
+      context_->destroy();
+      context_ = nullptr;
+    }
+    for (auto buf : buffers_) {
+      if (buf != nullptr) {
+        cudaFree(buf);
+      }
+    }
+    if (stream_ != 0) {
+      BASE_GPU_CHECK(cudaStreamDestroy(stream_));
+      stream_ = 0;
+    }
+    if (network_ != nullptr) {
+      network_->destroy();
+      network_ = nullptr;
+    }
 #ifdef NV_TENSORRT_MAJOR
 #if NV_TENSORRT_MAJOR != 8
-    builder_config_->destroy();
-#endif
-#endif
-    context_->destroy();
-    for (auto buf : buffers_) {
-      cudaFree(buf);
+    if (builder_config_ != nullptr) {
+      builder_config_->destroy();
+      builder_config_ = nullptr;
     }
+#endif
+#endif
+  }
+  if (is_own_calibrator_ && calibrator_ != nullptr) {
+    delete calibrator_;
+    calibrator_ = nullptr;
   }
 }
 

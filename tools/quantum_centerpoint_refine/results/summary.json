@@ -1,0 +1,284 @@
+{
+  "apollo_version_or_branch": "v11.0.0-10-gd53aa3da47-dirty",
+  "command": "tools/quantum_centerpoint_refine/scripts/compare_refine_modes.py --synthetic --num-synthetic-frames 4 --proposals-per-frame 32 --seed 2026 --student-metadata /tmp/phase7_student_distill/student_metadata.json --student-model /tmp/phase7_student_distill/student_model.onnx --teacher-checkpoint /tmp/phase6_q_refine_train/q_refine_checkpoint.npz --output-dir tools/quantum_centerpoint_refine/results",
+  "config_files": {
+    "phase9_script": "tools/quantum_centerpoint_refine/scripts/compare_refine_modes.py",
+    "student_metadata": "/tmp/phase7_student_distill/student_metadata.json"
+  },
+  "dataset_identifier": "synthetic_proposals_seed_2026_frames_4_proposals_32",
+  "delta_order": [
+    "delta_x",
+    "delta_y",
+    "delta_z",
+    "delta_length",
+    "delta_width",
+    "delta_height",
+    "delta_yaw",
+    "delta_score"
+  ],
+  "environment": {
+    "numpy": "1.18.5",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-Ubuntu-18.04-bionic",
+    "python": "3.6.9"
+  },
+  "feature_order": [
+    "x",
+    "y",
+    "z",
+    "length",
+    "width",
+    "height",
+    "yaw",
+    "score",
+    "class_id"
+  ],
+  "gate_checks": {
+    "invalid_boxes_checked": true,
+    "latency_overhead_reported": true,
+    "mock_zero_matches_baseline": true,
+    "student_model_metrics_reported": true
+  },
+  "git": {
+    "branch": "master",
+    "commit": "d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa",
+    "describe": "v11.0.0-10-gd53aa3da47-dirty"
+  },
+  "model_files": {
+    "student_metadata": "/tmp/phase7_student_distill/student_metadata.json",
+    "student_model": "/tmp/phase7_student_distill/student_model.onnx",
+    "teacher_checkpoint": "/tmp/phase6_q_refine_train/q_refine_checkpoint.npz"
+  },
+  "modes": [
+    "original_centerpoint",
+    "mock_zero",
+    "mock_delta",
+    "student_model",
+    "offline_quantum_teacher"
+  ],
+  "notes": [
+    "No performance improvement is claimed.",
+    "Object-after-NMS and GT metrics require a full labeled replay run."
+  ],
+  "summary": {
+    "mock_delta": {
+      "center_shift_mean_distribution": {
+        "max": 0.09999967366456985,
+        "mean": 0.09999954700469971,
+        "min": 0.09999944269657135,
+        "p50": 0.09999954700469971,
+        "p95": 0.09999965690076351
+      },
+      "class_distribution": {
+        "0": 31,
+        "1": 22,
+        "2": 18,
+        "3": 32,
+        "4": 25
+      },
+      "frame_count": 4,
+      "gt_metrics": null,
+      "gt_metrics_note": "ground truth labels were not provided",
+      "invalid_box_count": 0,
+      "latency_ms": {
+        "max": 0.08421500027179718,
+        "mean": 0.054184503853321075,
+        "min": 0.040907006710767746,
+        "p50": 0.04580800235271454,
+        "p95": 0.07855895124375818
+      },
+      "object_count_after_nms": null,
+      "object_count_after_nms_note": "not available in offline proposal report",
+      "proposal_count_before_nms": 128,
+      "size_shift_mean_distribution": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "yaw_shift_mean_distribution": {
+        "max": 0.04999998211860657,
+        "mean": 0.04999995976686478,
+        "min": 0.04999994486570358,
+        "p50": 0.04999995604157448,
+        "p95": 0.0499999787658453
+      }
+    },
+    "mock_zero": {
+      "center_shift_mean_distribution": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "class_distribution": {
+        "0": 31,
+        "1": 22,
+        "2": 18,
+        "3": 32,
+        "4": 25
+      },
+      "frame_count": 4,
+      "gt_metrics": null,
+      "gt_metrics_note": "ground truth labels were not provided",
+      "invalid_box_count": 0,
+      "latency_ms": {
+        "max": 0.022603999823331833,
+        "mean": 0.014027496799826622,
+        "min": 0.008000992238521576,
+        "p50": 0.012752498500049114,
+        "p95": 0.02183884996920824
+      },
+      "object_count_after_nms": null,
+      "object_count_after_nms_note": "not available in offline proposal report",
+      "proposal_count_before_nms": 128,
+      "size_shift_mean_distribution": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "yaw_shift_mean_distribution": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0
+      }
+    },
+    "offline_quantum_teacher": {
+      "center_shift_mean_distribution": {
+        "max": 0.0053352853283286095,
+        "mean": 0.005064397118985653,
+        "min": 0.004756071604788303,
+        "p50": 0.005083116237074137,
+        "p95": 0.005328927934169769
+      },
+      "class_distribution": {
+        "0": 31,
+        "1": 22,
+        "2": 18,
+        "3": 32,
+        "4": 25
+      },
+      "frame_count": 4,
+      "gt_metrics": null,
+      "gt_metrics_note": "ground truth labels were not provided",
+      "invalid_box_count": 0,
+      "latency_ms": {
+        "max": 14.506102561950684,
+        "mean": 9.012879371643066,
+        "min": 6.9619011878967285,
+        "p50": 7.291758060455322,
+        "p95": 13.43278737068176
+      },
+      "object_count_after_nms": null,
+      "object_count_after_nms_note": "not available in offline proposal report",
+      "proposal_count_before_nms": 128,
+      "size_shift_mean_distribution": {
+        "max": 0.002783572068437934,
+        "mean": 0.0026120019610971212,
+        "min": 0.002461436204612255,
+        "p50": 0.002601499669253826,
+        "p95": 0.002767039812169969
+      },
+      "yaw_shift_mean_distribution": {
+        "max": 0.005292370915412903,
+        "mean": 0.004393588751554489,
+        "min": 0.003274098038673401,
+        "p50": 0.004503943026065826,
+        "p95": 0.005227087065577507
+      }
+    },
+    "original_centerpoint": {
+      "center_shift_mean_distribution": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "class_distribution": {
+        "0": 31,
+        "1": 22,
+        "2": 18,
+        "3": 32,
+        "4": 25
+      },
+      "frame_count": 4,
+      "gt_metrics": null,
+      "gt_metrics_note": "ground truth labels were not provided",
+      "invalid_box_count": 0,
+      "latency_ms": {
+        "max": 1.1842039823532104,
+        "mean": 0.3044527471065521,
+        "min": 0.009802009910345078,
+        "p50": 0.011902498546987772,
+        "p95": 1.0085238341707732
+      },
+      "object_count_after_nms": null,
+      "object_count_after_nms_note": "not available in offline proposal report",
+      "proposal_count_before_nms": 128,
+      "size_shift_mean_distribution": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0
+      },
+      "yaw_shift_mean_distribution": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "p50": 0.0,
+        "p95": 0.0
+      }
+    },
+    "student_model": {
+      "center_shift_mean_distribution": {
+        "max": 0.2890087962150574,
+        "mean": 0.2652643322944641,
+        "min": 0.2462528944015503,
+        "p50": 0.2628978490829468,
+        "p95": 0.2873069256544113
+      },
+      "class_distribution": {
+        "0": 31,
+        "1": 22,
+        "2": 18,
+        "3": 32,
+        "4": 25
+      },
+      "frame_count": 4,
+      "gt_metrics": null,
+      "gt_metrics_note": "ground truth labels were not provided",
+      "invalid_box_count": 0,
+      "latency_ms": {
+        "max": 0.20383501052856445,
+        "mean": 0.1417742520570755,
+        "min": 0.08621500432491302,
+        "p50": 0.13852350041270256,
+        "p95": 0.2009094089269638
+      },
+      "object_count_after_nms": null,
+      "object_count_after_nms_note": "not available in offline proposal report",
+      "proposal_count_before_nms": 128,
+      "size_shift_mean_distribution": {
+        "max": 0.3685404062271118,
+        "mean": 0.33790355920791626,
+        "min": 0.32018524408340454,
+        "p50": 0.33144429326057434,
+        "p95": 0.36346029341220853
+      },
+      "yaw_shift_mean_distribution": {
+        "max": 0.16251897811889648,
+        "mean": 0.14306576550006866,
+        "min": 0.11188003420829773,
+        "p50": 0.14893203228712082,
+        "p95": 0.16117648333311083
+      }
+    }
+  }
+}
